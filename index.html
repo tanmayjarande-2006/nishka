@@ -1,309 +1,335 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Valentine's Day</title>
+<title>Happy Valentine's Day ❤️</title>
 
 <style>
+
+/* ============================= */
+/* GLOBAL STYLES */
+/* ============================= */
+
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom, #ffe6f0, #ffd6e8);
     text-align: center;
-    background: linear-gradient(to bottom, #ffe6eb, #fff0f5);
     overflow-x: hidden;
 }
 
+/* ============================= */
+/* HEADER */
+/* ============================= */
+
 header {
+    padding: 25px;
+    font-size: 30px;
+    font-weight: bold;
     background: #ff4d6d;
-    padding: 20px;
     color: white;
-    font-size: 28px;
-    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    letter-spacing: 1px;
 }
 
-/* Floating Hearts */
-.heart {
-    position: fixed;
-    bottom: -20px;
-    font-size: 20px;
-    animation: floatUp linear infinite;
-    pointer-events: none;
-}
+/* ============================= */
+/* GALLERY */
+/* ============================= */
 
-@keyframes floatUp {
-    to {
-        transform: translateY(-110vh);
-        opacity: 0;
-    }
-}
-
-/* Hero */
-.hero {
-    margin-top: 40px;
-}
-
-.hero img {
-    width: 350px;
-    max-width: 90%;
-    border-radius: 20px;
-}
-
-/* Typewriter */
-.typewriter {
-    font-size: 22px;
-    margin-top: 20px;
-    min-height: 40px;
-    font-weight: 500;
-}
-
-/* Gallery */
 .gallery {
-    margin: 80px 0 120px 0;
+    padding: 50px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.fade-img {
-    width: 320px;
-    max-width: 90%;
-    margin: 30px 0;
+.gallery img {
+    width: 90%;
+    max-width: 420px;
+    margin: 50px 0;
     border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+
     opacity: 0;
-    transform: translateY(40px);
+    transform: translateY(60px);
     transition: all 1s ease;
 }
 
-.fade-img.show {
+.gallery img.show {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* Popup */
-.popup {
+/* ============================= */
+/* POPUP */
+/* ============================= */
+
+.popup-overlay {
     position: fixed;
-    bottom: -500px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(15px);
-    padding: 30px;
-    border-radius: 24px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-    width: 340px;
-    transition: bottom 1s ease;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 2000;
 }
 
-.popup.show {
-    bottom: 40px;
+.popup-overlay.active {
+    visibility: visible;
+    opacity: 1;
 }
 
-/* Buttons */
-.button-container {
+.popup-box {
+    background: white;
+    padding: 35px;
+    border-radius: 25px;
+    width: 90%;
+    max-width: 380px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    animation: popupScale 0.4s ease;
     position: relative;
-    width: 100%;
-    height: 60px;
-    margin-top: 15px;
 }
 
-#yesBtn, #noBtn {
-    position: absolute;
-    top: 0;
-    padding: 12px 32px;
+@keyframes popupScale {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.popup-box h2 {
+    margin-bottom: 30px;
+    font-size: 22px;
+}
+
+/* ============================= */
+/* BUTTONS */
+/* ============================= */
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    position: relative;
+    height: 60px;
+}
+
+button {
+    padding: 14px 30px;
     font-size: 17px;
     border: none;
-    border-radius: 999px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 #yesBtn {
-    left: 40px;
     background: #ff4d6d;
     color: white;
-    box-shadow: 0 8px 20px rgba(255,77,109,0.4);
-}
-
-#yesBtn:hover {
-    transform: scale(1.05);
 }
 
 #noBtn {
-    right: 40px;
-    background: #e0e0e0;
-    color: #333;
+    background: #888;
+    color: white;
+    position: relative;
 }
 
-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
+/* ============================= */
+/* VIDEO DISPLAY */
+/* ============================= */
+
+#responseVideo {
+    width: 100%;
+    margin-top: 25px;
+    border-radius: 20px;
+    display: none;
 }
+
+/* ============================= */
+/* CONFETTI */
+/* ============================= */
+
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    top: -20px;
+    z-index: 3000;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(720deg);
+    }
+}
+
 </style>
 </head>
 
 <body>
 
-<header>❤️ Happy Valentine's Day</header>
+<header>❤️ Happy Valentine's Day ❤️</header>
 
-<div class="hero">
-    <img src="https://media.tenor.com/_zKc8qSx5S0AAAAC/cat-kiss-catkiss.gif">
-</div>
-
-<div class="typewriter" id="typewriter"></div>
+<!-- ============================= -->
+<!-- GALLERY -->
+<!-- ============================= -->
 
 <div class="gallery">
-    <img src="photo1.jpeg" class="fade-img">
-    <img src="photo2.jpeg" class="fade-img">
-    <img src="photo3.jpeg" class="fade-img">
-    <img src="photo5.jpeg" class="fade-img">
-    <img src="photo6.jpeg" class="fade-img">
-    <img src="photo7.jpeg" class="fade-img">
-    <img src="photo8.jpeg" class="fade-img">
-    <img src="photo9.jpeg" class="fade-img">
-    <img src="photo10.jpeg" class="fade-img">
-    <img src="photo11.jpeg" class="fade-img">
-    <img src="photo12.jpg" class="fade-img">
+    <img src="photo1.jpeg">
+    <img src="photo2.jpeg">
+    <img src="photo3.jpeg">
+    <img src="photo5.jpeg">
+    <img src="photo6.jpeg">
+    <img src="photo7.jpeg">
+    <img src="photo8.jpeg">
+    <img src="photo9.jpeg">
+    <img src="photo10.jpeg">
+    <img src="photo11.jpeg">
+    <img src="photo12.jpeg">
 </div>
 
-<div class="popup" id="popup">
-    <h2>Will you be my Valentine?</h2>
+<!-- ============================= -->
+<!-- POPUP -->
+<!-- ============================= -->
 
-    <div class="button-container" id="buttonContainer">
-        <button id="yesBtn">YES</button>
-        <button id="noBtn">NO</button>
+<div class="popup-overlay" id="popup">
+    <div class="popup-box">
+        <h2>Will you be my Valentine? 💖</h2>
+
+        <div class="buttons">
+            <button id="yesBtn">YES</button>
+            <button id="noBtn">NO</button>
+        </div>
+
+        <video id="responseVideo" autoplay loop muted playsinline></video>
     </div>
-
-    <img id="responseGif" style="display:none; width:250px; margin-top:20px; border-radius:15px;">
 </div>
-
-<canvas id="confetti"></canvas>
-
-<!-- Romantic Background Music -->
-<audio id="bgMusic" loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-</audio>
 
 <script>
 
-/* TYPEWRITER */
-const message = "Every moment with you feels like magic ✨";
-const typeDiv = document.getElementById("typewriter");
-let i = 0;
-function typeWriter(){
-    if(i < message.length){
-        typeDiv.innerHTML += message.charAt(i);
-        i++;
-        setTimeout(typeWriter, 60);
-    }
-}
-typeWriter();
+/* ============================= */
+/* FADE-IN GALLERY */
+/* ============================= */
 
-/* FLOATING HEARTS */
-function createHeart(){
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "❤️";
-    heart.style.left = Math.random()*100 + "vw";
-    heart.style.animationDuration = (3 + Math.random()*3) + "s";
-    document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(),6000);
-}
-setInterval(createHeart, 400);
+const galleryImages = document.querySelectorAll(".gallery img");
 
-/* FADE IMAGES */
-const fadeImages = document.querySelectorAll('.fade-img');
-window.addEventListener("load", ()=>{
-    fadeImages.forEach((img,index)=>{
-        setTimeout(()=>{ img.classList.add("show"); }, index*200);
+const imageObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+        }
     });
-});
+}, { threshold: 0.3 });
 
-/* SHOW POPUP */
+galleryImages.forEach(img => imageObserver.observe(img));
+
+/* ============================= */
+/* POPUP TRIGGER AT BOTTOM */
+/* ============================= */
+
 const popup = document.getElementById("popup");
-window.addEventListener("scroll", ()=>{
-    if(window.scrollY > 400){
-        popup.classList.add("show");
+
+window.addEventListener("scroll", () => {
+    const reachedBottom =
+        window.innerHeight + window.scrollY >= document.body.offsetHeight - 5;
+
+    if (reachedBottom) {
+        popup.classList.add("active");
     }
 });
 
-/* NO BUTTON ESCAPE */
-const noBtn = document.getElementById("noBtn");
-const container = document.getElementById("buttonContainer");
-function moveNoButton(){
-    const maxX = container.offsetWidth - noBtn.offsetWidth;
-    const randomX = Math.random()*maxX;
-    noBtn.style.left = randomX+"px";
-    noBtn.style.right="auto";
-}
-container.addEventListener("mousemove",(e)=>{
-    const rect = noBtn.getBoundingClientRect();
-    const distance = Math.hypot(e.clientX-rect.left,e.clientY-rect.top);
-    if(distance<90){ moveNoButton(); }
-});
+/* ============================= */
+/* BUTTON LOGIC */
+/* ============================= */
 
-/* MUSIC CONTROL */
-const music = document.getElementById("bgMusic");
-
-/* Start music on first click anywhere */
-document.body.addEventListener("click", ()=>{
-    music.play().catch(()=>{});
-},{ once:true });
-
-/* YES BUTTON */
 const yesBtn = document.getElementById("yesBtn");
-const responseGif = document.getElementById("responseGif");
+const noBtn = document.getElementById("noBtn");
+const responseVideo = document.getElementById("responseVideo");
 
-yesBtn.addEventListener("click", async ()=>{
-    responseGif.style.display="block";
-    responseGif.src="https://media.tenor.com/l4DqFqvZq9QAAAAC/yippee-cat-kitty.gif";
+let noClickCount = 0;
+let yesScale = 1;
+let noScale = 1;
 
-    try{
-        await music.play();
-    }catch(e){}
+/* ---------- NO RUNS AWAY ---------- */
 
-    startConfetti();
+noBtn.addEventListener("mouseenter", () => {
+
+    const randomX = (Math.random() - 0.5) * 200;
+    const randomY = (Math.random() - 0.5) * 120;
+
+    noBtn.style.transform =
+        translate(${randomX}px, ${randomY}px) scale(${noScale});
 });
 
-/* CONFETTI */
-const canvas=document.getElementById("confetti");
-const ctx=canvas.getContext("2d");
+/* ---------- NO CLICK ---------- */
 
-function resizeCanvas(){
-    canvas.width=window.innerWidth;
-    canvas.height=window.innerHeight;
-}
-resizeCanvas();
-window.addEventListener("resize",resizeCanvas);
+noBtn.addEventListener("click", () => {
 
-let pieces=[];
-function startConfetti(){
-    for(let i=0;i<150;i++){
-        pieces.push({
-            x:Math.random()*canvas.width,
-            y:Math.random()*canvas.height-canvas.height,
-            size:Math.random()*8+4,
-            speed:Math.random()*3+2,
-            color:`hsl(${Math.random()*360},100%,50%)`
-        });
+    noClickCount++;
+
+    noScale -= 0.2;
+    yesScale += 0.2;
+
+    if (noScale < 0) noScale = 0;
+
+    noBtn.style.transform = scale(${noScale});
+    yesBtn.style.transform = scale(${yesScale});
+
+    responseVideo.src = "scat.mp4";
+    responseVideo.style.display = "block";
+
+    if (noClickCount >= 4) {
+        noBtn.style.display = "none";
     }
-    requestAnimationFrame(updateConfetti);
-}
+});
 
-function updateConfetti(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    pieces.forEach(p=>{
-        p.y+=p.speed;
-        if(p.y>canvas.height) p.y=-10;
-        ctx.fillStyle=p.color;
-        ctx.fillRect(p.x,p.y,p.size,p.size);
-    });
-    requestAnimationFrame(updateConfetti);
+/* ---------- YES CLICK ---------- */
+
+yesBtn.addEventListener("click", () => {
+
+    responseVideo.src = "hcat.mp4";
+    responseVideo.style.display = "block";
+
+    launchConfetti();
+});
+
+/* ============================= */
+/* CONFETTI SYSTEM */
+/* ============================= */
+
+function launchConfetti() {
+
+    for (let i = 0; i < 180; i++) {
+
+        const confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.backgroundColor =
+            hsl(${Math.random() * 360}, 100%, 50%);
+
+        confetti.style.animationDuration =
+            (Math.random() * 3 + 2) + "s";
+
+        document.body.appendChild(confetti);
+
+        setTimeout(() => {
+            confetti.remove();
+        }, 5000);
+    }
 }
 
 </script>
+
 </body>
 </html>
