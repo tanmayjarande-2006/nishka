@@ -6,36 +6,59 @@
 <title>Happy Valentine's Day ❤️</title>
 
 <style>
+
+/* ============================= */
+/* GLOBAL STYLES */
+/* ============================= */
+
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom, #ffe6f0, #ffd6e8);
     text-align: center;
-    background: #ffe6f0;
     overflow-x: hidden;
 }
 
+/* ============================= */
+/* HEADER */
+/* ============================= */
+
 header {
-    padding: 20px;
-    font-size: 28px;
+    padding: 25px;
+    font-size: 30px;
     font-weight: bold;
     background: #ff4d6d;
     color: white;
     position: sticky;
     top: 0;
     z-index: 1000;
+    letter-spacing: 1px;
 }
 
+/* ============================= */
+/* GALLERY */
+/* ============================= */
+
 .gallery {
-    padding: 40px 20px;
+    padding: 50px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .gallery img {
-    width: 80%;
-    max-width: 400px;
-    margin: 40px 0;
+    width: 90%;
+    max-width: 420px;
+    margin: 50px 0;
     border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+
     opacity: 0;
-    transform: translateY(50px);
+    transform: translateY(60px);
     transition: all 1s ease;
 }
 
@@ -44,17 +67,21 @@ header {
     transform: translateY(0);
 }
 
-/* Popup */
+/* ============================= */
+/* POPUP */
+/* ============================= */
+
 .popup-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.65);
     display: flex;
     justify-content: center;
     align-items: center;
+
     visibility: hidden;
     opacity: 0;
-    transition: 0.5s;
+    transition: opacity 0.4s ease;
     z-index: 2000;
 }
 
@@ -65,35 +92,44 @@ header {
 
 .popup-box {
     background: white;
-    padding: 30px;
-    border-radius: 20px;
+    padding: 35px;
+    border-radius: 25px;
     width: 90%;
-    max-width: 350px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    animation: pop 0.4s ease;
+    max-width: 380px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    animation: popupScale 0.4s ease;
     position: relative;
 }
 
-@keyframes pop {
-    from { transform: scale(0.7); }
-    to { transform: scale(1); }
+@keyframes popupScale {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
+
+.popup-box h2 {
+    margin-bottom: 30px;
+    font-size: 22px;
+}
+
+/* ============================= */
+/* BUTTONS */
+/* ============================= */
 
 .buttons {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 30px;
     position: relative;
+    height: 60px;
 }
 
 button {
-    padding: 12px 25px;
-    font-size: 16px;
+    padding: 14px 30px;
+    font-size: 17px;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: 0.3s ease;
-    position: relative;
+    transition: transform 0.3s ease;
 }
 
 #yesBtn {
@@ -102,71 +138,92 @@ button {
 }
 
 #noBtn {
-    background: #999;
+    background: #888;
     color: white;
+    position: relative;
 }
 
-/* Video display */
+/* ============================= */
+/* VIDEO DISPLAY */
+/* ============================= */
+
 #responseVideo {
-    width: 90%;
-    max-width: 350px;
-    margin-top: 20px;
+    width: 100%;
+    margin-top: 25px;
     border-radius: 20px;
     display: none;
 }
 
-/* Confetti */
+/* ============================= */
+/* CONFETTI */
+/* ============================= */
+
 .confetti {
     position: fixed;
     width: 10px;
     height: 10px;
-    top: -10px;
+    top: -20px;
     z-index: 3000;
     animation: fall linear forwards;
 }
 
 @keyframes fall {
     to {
-        transform: translateY(100vh) rotate(720deg);
+        transform: translateY(110vh) rotate(720deg);
     }
 }
+
 </style>
 </head>
 
 <body>
 
-<header>❤️ Happy Valentine's Day</header>
+<header>❤️ Happy Valentine's Day ❤️</header>
+
+<!-- ============================= -->
+<!-- GALLERY -->
+<!-- ============================= -->
 
 <div class="gallery">
-    <img src="photo1.jpeg" class="fade-img">
-    <img src="photo2.jpeg" class="fade-img">
-    <img src="photo3.jpeg" class="fade-img">
-    <img src="photo5.jpeg" class="fade-img">
-    <img src="photo6.jpeg" class="fade-img">
-    <img src="photo7.jpeg" class="fade-img">
-    <img src="photo8.jpeg" class="fade-img">
-    <img src="photo9.jpeg" class="fade-img">
-    <img src="photo10.jpeg" class="fade-img">
-    <img src="photo11.jpeg" class="fade-img">
-    <img src="photo12.jpg" class="fade-img">
+    <img src="photo1.jpeg">
+    <img src="photo2.jpeg">
+    <img src="photo3.jpeg">
+    <img src="photo5.jpeg">
+    <img src="photo6.jpeg">
+    <img src="photo7.jpeg">
+    <img src="photo8.jpeg">
+    <img src="photo9.jpeg">
+    <img src="photo10.jpeg">
+    <img src="photo11.jpeg">
+    <img src="photo12.jpeg">
 </div>
+
+<!-- ============================= -->
+<!-- POPUP -->
+<!-- ============================= -->
 
 <div class="popup-overlay" id="popup">
     <div class="popup-box">
-        <h2>Will you be my Valentine?</h2>
+        <h2>Will you be my Valentine? 💖</h2>
+
         <div class="buttons">
             <button id="yesBtn">YES</button>
             <button id="noBtn">NO</button>
         </div>
 
-        <video id="responseVideo" autoplay loop muted></video>
+        <video id="responseVideo" autoplay loop muted playsinline></video>
     </div>
 </div>
 
 <script>
-// Fade-in gallery
-const images = document.querySelectorAll(".gallery img");
-const observer = new IntersectionObserver(entries => {
+
+/* ============================= */
+/* FADE-IN GALLERY */
+/* ============================= */
+
+const galleryImages = document.querySelectorAll(".gallery img");
+
+const imageObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add("show");
@@ -174,73 +231,104 @@ const observer = new IntersectionObserver(entries => {
     });
 }, { threshold: 0.3 });
 
-images.forEach(img => observer.observe(img));
+galleryImages.forEach(img => imageObserver.observe(img));
 
-// Show popup when bottom reached
+/* ============================= */
+/* POPUP TRIGGER AT BOTTOM */
+/* ============================= */
+
 const popup = document.getElementById("popup");
 
 window.addEventListener("scroll", () => {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 5) {
+    const reachedBottom =
+        window.innerHeight + window.scrollY >= document.body.offsetHeight - 5;
+
+    if (reachedBottom) {
         popup.classList.add("active");
     }
 });
 
-// Buttons
+/* ============================= */
+/* BUTTON LOGIC */
+/* ============================= */
+
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
-const video = document.getElementById("responseVideo");
+const responseVideo = document.getElementById("responseVideo");
 
 let noClickCount = 0;
 let yesScale = 1;
 let noScale = 1;
 
-// NO button runs away
-noBtn.addEventListener("mouseover", () => {
-    const randomX = Math.random() * 200 - 100;
-    const randomY = Math.random() * 200 - 100;
-    noBtn.style.transform = translate(${randomX}px, ${randomY}px) scale(${noScale});
+/* ---------- NO RUNS AWAY ---------- */
+
+noBtn.addEventListener("mouseenter", () => {
+
+    const randomX = (Math.random() - 0.5) * 200;
+    const randomY = (Math.random() - 0.5) * 120;
+
+    noBtn.style.transform =
+        translate(${randomX}px, ${randomY}px) scale(${noScale});
 });
 
-// NO button click
+/* ---------- NO CLICK ---------- */
+
 noBtn.addEventListener("click", () => {
+
     noClickCount++;
 
     noScale -= 0.2;
     yesScale += 0.2;
 
+    if (noScale < 0) noScale = 0;
+
     noBtn.style.transform = scale(${noScale});
     yesBtn.style.transform = scale(${yesScale});
 
-    video.src = "scat.mp4";
-    video.style.display = "block";
+    responseVideo.src = "scat.mp4";
+    responseVideo.style.display = "block";
 
     if (noClickCount >= 4) {
         noBtn.style.display = "none";
     }
 });
 
-// YES button click
-yesBtn.addEventListener("click", () => {
-    video.src = "hcat.mp4";
-    video.style.display = "block";
+/* ---------- YES CLICK ---------- */
 
-    createConfetti();
+yesBtn.addEventListener("click", () => {
+
+    responseVideo.src = "hcat.mp4";
+    responseVideo.style.display = "block";
+
+    launchConfetti();
 });
 
-// Confetti function
-function createConfetti() {
-    for (let i = 0; i < 150; i++) {
+/* ============================= */
+/* CONFETTI SYSTEM */
+/* ============================= */
+
+function launchConfetti() {
+
+    for (let i = 0; i < 180; i++) {
+
         const confetti = document.createElement("div");
         confetti.classList.add("confetti");
+
         confetti.style.left = Math.random() * 100 + "vw";
-        confetti.style.backgroundColor = 
+        confetti.style.backgroundColor =
             hsl(${Math.random() * 360}, 100%, 50%);
-        confetti.style.animationDuration = (Math.random() * 3 + 2) + "s";
+
+        confetti.style.animationDuration =
+            (Math.random() * 3 + 2) + "s";
+
         document.body.appendChild(confetti);
 
-        setTimeout(() => confetti.remove(), 5000);
+        setTimeout(() => {
+            confetti.remove();
+        }, 5000);
     }
 }
+
 </script>
 
 </body>
