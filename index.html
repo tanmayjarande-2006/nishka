@@ -181,9 +181,9 @@ canvas {
 
 <canvas id="confetti"></canvas>
 
-<!-- Romantic Background Music -->
+<!-- Local Music -->
 <audio id="bgMusic" loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    <source src="song.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -232,22 +232,24 @@ window.addEventListener("scroll", ()=>{
 /* NO BUTTON ESCAPE */
 const noBtn = document.getElementById("noBtn");
 const container = document.getElementById("buttonContainer");
+
 function moveNoButton(){
     const maxX = container.offsetWidth - noBtn.offsetWidth;
     const randomX = Math.random()*maxX;
-    noBtn.style.left = randomX+"px";
-    noBtn.style.right="auto";
+    noBtn.style.left = randomX + "px";
+    noBtn.style.right = "auto";
 }
+
 container.addEventListener("mousemove",(e)=>{
     const rect = noBtn.getBoundingClientRect();
     const distance = Math.hypot(e.clientX-rect.left,e.clientY-rect.top);
-    if(distance<90){ moveNoButton(); }
+    if(distance < 90){ moveNoButton(); }
 });
+
+noBtn.addEventListener("touchstart", moveNoButton);
 
 /* MUSIC CONTROL */
 const music = document.getElementById("bgMusic");
-
-/* Start music on first click anywhere */
 document.body.addEventListener("click", ()=>{
     music.play().catch(()=>{});
 },{ once:true });
@@ -256,37 +258,35 @@ document.body.addEventListener("click", ()=>{
 const yesBtn = document.getElementById("yesBtn");
 const responseGif = document.getElementById("responseGif");
 
-yesBtn.addEventListener("click", async ()=>{
+yesBtn.addEventListener("click", ()=>{
     responseGif.style.display="block";
     responseGif.src="https://media.tenor.com/l4DqFqvZq9QAAAAC/yippee-cat-kitty.gif";
-
-    try{
-        await music.play();
-    }catch(e){}
-
+    music.play().catch(()=>{});
     startConfetti();
 });
 
 /* CONFETTI */
-const canvas=document.getElementById("confetti");
-const ctx=canvas.getContext("2d");
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
 
 function resizeCanvas(){
-    canvas.width=window.innerWidth;
-    canvas.height=window.innerHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 }
 resizeCanvas();
-window.addEventListener("resize",resizeCanvas);
+window.addEventListener("resize", resizeCanvas);
 
-let pieces=[];
+let pieces = [];
+
 function startConfetti(){
+    pieces = [];
     for(let i=0;i<150;i++){
         pieces.push({
-            x:Math.random()*canvas.width,
-            y:Math.random()*canvas.height-canvas.height,
-            size:Math.random()*8+4,
-            speed:Math.random()*3+2,
-            color:`hsl(${Math.random()*360},100%,50%)`
+            x: Math.random()*canvas.width,
+            y: Math.random()*canvas.height - canvas.height,
+            size: Math.random()*8+4,
+            speed: Math.random()*3+2,
+            color: hsl(${Math.random()*360},100%,50%)
         });
     }
     requestAnimationFrame(updateConfetti);
@@ -295,9 +295,9 @@ function startConfetti(){
 function updateConfetti(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     pieces.forEach(p=>{
-        p.y+=p.speed;
-        if(p.y>canvas.height) p.y=-10;
-        ctx.fillStyle=p.color;
+        p.y += p.speed;
+        if(p.y > canvas.height) p.y = -10;
+        ctx.fillStyle = p.color;
         ctx.fillRect(p.x,p.y,p.size,p.size);
     });
     requestAnimationFrame(updateConfetti);
