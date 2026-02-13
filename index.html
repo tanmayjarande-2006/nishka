@@ -14,7 +14,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Header */
 header {
     background: #ff4d6d;
     padding: 20px;
@@ -182,9 +181,9 @@ canvas {
 
 <canvas id="confetti"></canvas>
 
-<!-- Background Music -->
+<!-- Romantic Background Music -->
 <audio id="bgMusic" loop>
-    <source src="https://www2.cs.uic.edu/~i101/SoundFiles/StarWars60.wav" type="audio/wav">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -193,7 +192,6 @@ canvas {
 const message = "Every moment with you feels like magic ✨";
 const typeDiv = document.getElementById("typewriter");
 let i = 0;
-
 function typeWriter(){
     if(i < message.length){
         typeDiv.innerHTML += message.charAt(i);
@@ -219,13 +217,11 @@ setInterval(createHeart, 400);
 const fadeImages = document.querySelectorAll('.fade-img');
 window.addEventListener("load", ()=>{
     fadeImages.forEach((img,index)=>{
-        setTimeout(()=>{
-            img.classList.add("show");
-        }, index*200);
+        setTimeout(()=>{ img.classList.add("show"); }, index*200);
     });
 });
 
-/* SHOW POPUP AFTER SCROLL */
+/* SHOW POPUP */
 const popup = document.getElementById("popup");
 window.addEventListener("scroll", ()=>{
     if(window.scrollY > 400){
@@ -236,29 +232,38 @@ window.addEventListener("scroll", ()=>{
 /* NO BUTTON ESCAPE */
 const noBtn = document.getElementById("noBtn");
 const container = document.getElementById("buttonContainer");
-
 function moveNoButton(){
     const maxX = container.offsetWidth - noBtn.offsetWidth;
     const randomX = Math.random()*maxX;
     noBtn.style.left = randomX+"px";
     noBtn.style.right="auto";
 }
-
 container.addEventListener("mousemove",(e)=>{
     const rect = noBtn.getBoundingClientRect();
     const distance = Math.hypot(e.clientX-rect.left,e.clientY-rect.top);
     if(distance<90){ moveNoButton(); }
 });
 
+/* MUSIC CONTROL */
+const music = document.getElementById("bgMusic");
+
+/* Start music on first click anywhere */
+document.body.addEventListener("click", ()=>{
+    music.play().catch(()=>{});
+},{ once:true });
+
 /* YES BUTTON */
 const yesBtn = document.getElementById("yesBtn");
 const responseGif = document.getElementById("responseGif");
-const music = document.getElementById("bgMusic");
 
-yesBtn.addEventListener("click",()=>{
+yesBtn.addEventListener("click", async ()=>{
     responseGif.style.display="block";
     responseGif.src="https://media.tenor.com/l4DqFqvZq9QAAAAC/yippee-cat-kitty.gif";
-    music.play();
+
+    try{
+        await music.play();
+    }catch(e){}
+
     startConfetti();
 });
 
