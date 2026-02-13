@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,22 +20,6 @@ header {
     color: white;
     font-size: 28px;
     font-weight: 600;
-}
-
-/* Floating Hearts */
-.heart {
-    position: fixed;
-    bottom: -20px;
-    font-size: 20px;
-    animation: floatUp linear infinite;
-    pointer-events: none;
-}
-
-@keyframes floatUp {
-    to {
-        transform: translateY(-110vh);
-        opacity: 0;
-    }
 }
 
 /* Hero */
@@ -123,17 +106,20 @@ header {
     left: 40px;
     background: #ff4d6d;
     color: white;
-    box-shadow: 0 8px 20px rgba(255,77,109,0.4);
-}
-
-#yesBtn:hover {
-    transform: scale(1.05);
 }
 
 #noBtn {
     right: 40px;
     background: #e0e0e0;
     color: #333;
+}
+
+/* Response Video */
+#responseVideo {
+    display: none;
+    width: 250px;
+    margin-top: 20px;
+    border-radius: 15px;
 }
 
 canvas {
@@ -150,23 +136,16 @@ canvas {
 <header>❤️ Happy Valentine's Day</header>
 
 <div class="hero">
-    <img src="https://media.tenor.com/_zKc8qSx5S0AAAAC/cat-kiss-catkiss.gif">
+    <img src="photo1.jpeg">
 </div>
 
 <div class="typewriter" id="typewriter"></div>
 
 <div class="gallery">
-    <img src="photo1.jpeg" class="fade-img">
     <img src="photo2.jpeg" class="fade-img">
     <img src="photo3.jpeg" class="fade-img">
     <img src="photo5.jpeg" class="fade-img">
     <img src="photo6.jpeg" class="fade-img">
-    <img src="photo7.jpeg" class="fade-img">
-    <img src="photo8.jpeg" class="fade-img">
-    <img src="photo9.jpeg" class="fade-img">
-    <img src="photo10.jpeg" class="fade-img">
-    <img src="photo11.jpeg" class="fade-img">
-    <img src="photo12.jpg" class="fade-img">
 </div>
 
 <div class="popup" id="popup">
@@ -177,14 +156,13 @@ canvas {
         <button id="noBtn">NO</button>
     </div>
 
-    <img id="responseGif" style="display:none; width:250px; margin-top:20px; border-radius:15px;">
+    <video id="responseVideo" playsinline></video>
 </div>
 
 <canvas id="confetti"></canvas>
 
-<!-- Romantic Background Music -->
 <audio id="bgMusic" loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    <source src="song.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -202,18 +180,6 @@ function typeWriter(){
 }
 typeWriter();
 
-/* FLOATING HEARTS */
-function createHeart(){
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "❤️";
-    heart.style.left = Math.random()*100 + "vw";
-    heart.style.animationDuration = (3 + Math.random()*3) + "s";
-    document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(),6000);
-}
-setInterval(createHeart, 400);
-
 /* FADE IMAGES */
 const fadeImages = document.querySelectorAll('.fade-img');
 window.addEventListener("load", ()=>{
@@ -225,7 +191,7 @@ window.addEventListener("load", ()=>{
 /* SHOW POPUP */
 const popup = document.getElementById("popup");
 window.addEventListener("scroll", ()=>{
-    if(window.scrollY > 400){
+    if(window.scrollY > 200){
         popup.classList.add("show");
     }
 });
@@ -233,61 +199,68 @@ window.addEventListener("scroll", ()=>{
 /* NO BUTTON ESCAPE */
 const noBtn = document.getElementById("noBtn");
 const container = document.getElementById("buttonContainer");
+
 function moveNoButton(){
     const maxX = container.offsetWidth - noBtn.offsetWidth;
     const randomX = Math.random()*maxX;
-    noBtn.style.left = randomX+"px";
-    noBtn.style.right="auto";
+    noBtn.style.left = randomX + "px";
+    noBtn.style.right = "auto";
 }
+
 container.addEventListener("mousemove",(e)=>{
     const rect = noBtn.getBoundingClientRect();
     const distance = Math.hypot(e.clientX-rect.left,e.clientY-rect.top);
-    if(distance<90){ moveNoButton(); }
+    if(distance < 90){ moveNoButton(); }
 });
 
-/* MUSIC CONTROL */
-const music = document.getElementById("bgMusic");
+noBtn.addEventListener("touchstart", moveNoButton);
 
-/* Start music on first click anywhere */
+/* MUSIC */
+const music = document.getElementById("bgMusic");
 document.body.addEventListener("click", ()=>{
     music.play().catch(()=>{});
 },{ once:true });
 
-/* YES BUTTON */
+/* RESPONSE VIDEOS */
 const yesBtn = document.getElementById("yesBtn");
-const responseGif = document.getElementById("responseGif");
+const responseVideo = document.getElementById("responseVideo");
 
-yesBtn.addEventListener("click", async ()=>{
-    responseGif.style.display="block";
-    responseGif.src="https://media.tenor.com/l4DqFqvZq9QAAAAC/yippee-cat-kitty.gif";
-
-    try{
-        await music.play();
-    }catch(e){}
-
+yesBtn.addEventListener("click", ()=>{
+    responseVideo.style.display = "block";
+    responseVideo.src = "hcat.mp4";
+    responseVideo.play();
+    music.play().catch(()=>{});
     startConfetti();
 });
 
+noBtn.addEventListener("click", ()=>{
+    responseVideo.style.display = "block";
+    responseVideo.src = "scat.mp4";
+    responseVideo.play();
+});
+
 /* CONFETTI */
-const canvas=document.getElementById("confetti");
-const ctx=canvas.getContext("2d");
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
 
 function resizeCanvas(){
-    canvas.width=window.innerWidth;
-    canvas.height=window.innerHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 }
 resizeCanvas();
-window.addEventListener("resize",resizeCanvas);
+window.addEventListener("resize", resizeCanvas);
 
-let pieces=[];
+let pieces = [];
+
 function startConfetti(){
+    pieces = [];
     for(let i=0;i<150;i++){
         pieces.push({
-            x:Math.random()*canvas.width,
-            y:Math.random()*canvas.height-canvas.height,
-            size:Math.random()*8+4,
-            speed:Math.random()*3+2,
-            color:`hsl(${Math.random()*360},100%,50%)`
+            x: Math.random()*canvas.width,
+            y: Math.random()*canvas.height - canvas.height,
+            size: Math.random()*8+4,
+            speed: Math.random()*3+2,
+            color: hsl(${Math.random()*360},100%,50%)
         });
     }
     requestAnimationFrame(updateConfetti);
@@ -296,9 +269,9 @@ function startConfetti(){
 function updateConfetti(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     pieces.forEach(p=>{
-        p.y+=p.speed;
-        if(p.y>canvas.height) p.y=-10;
-        ctx.fillStyle=p.color;
+        p.y += p.speed;
+        if(p.y > canvas.height) p.y = -10;
+        ctx.fillStyle = p.color;
         ctx.fillRect(p.x,p.y,p.size,p.size);
     });
     requestAnimationFrame(updateConfetti);
