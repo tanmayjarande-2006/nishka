@@ -23,7 +23,23 @@ header {
     font-weight: 600;
 }
 
-/* Hero GIF */
+/* Floating Hearts */
+.heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 20px;
+    animation: floatUp linear infinite;
+    pointer-events: none;
+}
+
+@keyframes floatUp {
+    to {
+        transform: translateY(-110vh);
+        opacity: 0;
+    }
+}
+
+/* Hero */
 .hero {
     margin-top: 40px;
 }
@@ -34,9 +50,17 @@ header {
     border-radius: 20px;
 }
 
+/* Typewriter */
+.typewriter {
+    font-size: 22px;
+    margin-top: 20px;
+    min-height: 40px;
+    font-weight: 500;
+}
+
 /* Gallery */
 .gallery {
-    margin: 100px 0 200px 0;
+    margin: 80px 0 120px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -60,15 +84,20 @@ header {
 /* Popup */
 .popup {
     position: fixed;
-    bottom: 40px;
+    bottom: -500px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.95);
     backdrop-filter: blur(15px);
     padding: 30px;
     border-radius: 24px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.15);
     width: 340px;
+    transition: bottom 1s ease;
+}
+
+.popup.show {
+    bottom: 40px;
 }
 
 /* Buttons */
@@ -107,7 +136,6 @@ header {
     color: #333;
 }
 
-/* Confetti Canvas */
 canvas {
     position: fixed;
     top: 0;
@@ -125,6 +153,8 @@ canvas {
     <img src="https://media.tenor.com/_zKc8qSx5S0AAAAC/cat-kiss-catkiss.gif">
 </div>
 
+<div class="typewriter" id="typewriter"></div>
+
 <div class="gallery">
     <img src="photo1.jpeg" class="fade-img">
     <img src="photo2.jpeg" class="fade-img">
@@ -139,7 +169,7 @@ canvas {
     <img src="photo12.jpg" class="fade-img">
 </div>
 
-<div class="popup">
+<div class="popup" id="popup">
     <h2>Will you be my Valentine?</h2>
 
     <div class="button-container" id="buttonContainer">
@@ -147,85 +177,111 @@ canvas {
         <button id="noBtn">NO</button>
     </div>
 
-    <div>
-        <img id="responseGif" style="display:none; width:250px; margin-top:20px; border-radius:15px;">
-    </div>
+    <img id="responseGif" style="display:none; width:250px; margin-top:20px; border-radius:15px;">
 </div>
 
 <canvas id="confetti"></canvas>
 
+<!-- Background Music -->
+<audio id="bgMusic" loop>
+    <source src="https://www2.cs.uic.edu/~i101/SoundFiles/StarWars60.wav" type="audio/wav">
+</audio>
+
 <script>
 
-/* Fade-in on load */
-const fadeImages = document.querySelectorAll('.fade-img');
+/* TYPEWRITER */
+const message = "Every moment with you feels like magic ✨";
+const typeDiv = document.getElementById("typewriter");
+let i = 0;
 
-window.addEventListener("load", () => {
-    fadeImages.forEach((img, index) => {
-        setTimeout(() => {
+function typeWriter(){
+    if(i < message.length){
+        typeDiv.innerHTML += message.charAt(i);
+        i++;
+        setTimeout(typeWriter, 60);
+    }
+}
+typeWriter();
+
+/* FLOATING HEARTS */
+function createHeart(){
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random()*100 + "vw";
+    heart.style.animationDuration = (3 + Math.random()*3) + "s";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),6000);
+}
+setInterval(createHeart, 400);
+
+/* FADE IMAGES */
+const fadeImages = document.querySelectorAll('.fade-img');
+window.addEventListener("load", ()=>{
+    fadeImages.forEach((img,index)=>{
+        setTimeout(()=>{
             img.classList.add("show");
-        }, index * 200);
+        }, index*200);
     });
 });
 
+/* SHOW POPUP AFTER SCROLL */
+const popup = document.getElementById("popup");
+window.addEventListener("scroll", ()=>{
+    if(window.scrollY > 400){
+        popup.classList.add("show");
+    }
+});
 
-/* NO button movement */
+/* NO BUTTON ESCAPE */
 const noBtn = document.getElementById("noBtn");
 const container = document.getElementById("buttonContainer");
 
 function moveNoButton(){
     const maxX = container.offsetWidth - noBtn.offsetWidth;
-    const randomX = Math.random() * maxX;
-    noBtn.style.left = randomX + "px";
-    noBtn.style.right = "auto";
+    const randomX = Math.random()*maxX;
+    noBtn.style.left = randomX+"px";
+    noBtn.style.right="auto";
 }
 
-container.addEventListener("mousemove", (e) => {
+container.addEventListener("mousemove",(e)=>{
     const rect = noBtn.getBoundingClientRect();
-    const distance = Math.hypot(
-        e.clientX - rect.left,
-        e.clientY - rect.top
-    );
-    if(distance < 90){
-        moveNoButton();
-    }
+    const distance = Math.hypot(e.clientX-rect.left,e.clientY-rect.top);
+    if(distance<90){ moveNoButton(); }
 });
 
-noBtn.addEventListener("touchstart", moveNoButton);
-
-
-/* YES button logic */
+/* YES BUTTON */
 const yesBtn = document.getElementById("yesBtn");
 const responseGif = document.getElementById("responseGif");
+const music = document.getElementById("bgMusic");
 
-yesBtn.addEventListener("click", () => {
-    responseGif.style.display = "block";
-    responseGif.src = "https://media.tenor.com/l4DqFqvZq9QAAAAC/yippee-cat-kitty.gif";
+yesBtn.addEventListener("click",()=>{
+    responseGif.style.display="block";
+    responseGif.src="https://media.tenor.com/l4DqFqvZq9QAAAAC/yippee-cat-kitty.gif";
+    music.play();
     startConfetti();
 });
 
+/* CONFETTI */
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
 
-/* Confetti */
-const canvas = document.getElementById("confetti");
-const ctx = canvas.getContext("2d");
-
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+function resizeCanvas(){
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
 }
 resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
+window.addEventListener("resize",resizeCanvas);
 
-let pieces = [];
-
+let pieces=[];
 function startConfetti(){
-    pieces = [];
     for(let i=0;i<150;i++){
         pieces.push({
-            x: Math.random()*canvas.width,
-            y: Math.random()*canvas.height - canvas.height,
-            size: Math.random()*8+4,
-            speed: Math.random()*3+2,
-            color: `hsl(${Math.random()*360},100%,50%)`
+            x:Math.random()*canvas.width,
+            y:Math.random()*canvas.height-canvas.height,
+            size:Math.random()*8+4,
+            speed:Math.random()*3+2,
+            color:`hsl(${Math.random()*360},100%,50%)`
         });
     }
     requestAnimationFrame(updateConfetti);
@@ -234,15 +290,14 @@ function startConfetti(){
 function updateConfetti(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     pieces.forEach(p=>{
-        p.y += p.speed;
-        if(p.y > canvas.height) p.y = -10;
-        ctx.fillStyle = p.color;
+        p.y+=p.speed;
+        if(p.y>canvas.height) p.y=-10;
+        ctx.fillStyle=p.color;
         ctx.fillRect(p.x,p.y,p.size,p.size);
     });
     requestAnimationFrame(updateConfetti);
 }
 
 </script>
-
 </body>
 </html>
