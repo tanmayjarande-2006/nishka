@@ -22,7 +22,6 @@ header {
     font-weight: 600;
 }
 
-/* Floating Hearts */
 .heart {
     position: fixed;
     bottom: -20px;
@@ -38,18 +37,6 @@ header {
     }
 }
 
-/* Hero */
-.hero {
-    margin-top: 40px;
-}
-
-.hero video {
-    width: 350px;
-    max-width: 90%;
-    border-radius: 20px;
-}
-
-/* Typewriter */
 .typewriter {
     font-size: 22px;
     margin-top: 20px;
@@ -57,7 +44,6 @@ header {
     font-weight: 500;
 }
 
-/* Gallery */
 .gallery {
     margin: 80px 0 120px 0;
     display: flex;
@@ -80,7 +66,6 @@ header {
     transform: translateY(0);
 }
 
-/* Popup */
 .popup {
     position: fixed;
     bottom: -500px;
@@ -99,7 +84,6 @@ header {
     bottom: 40px;
 }
 
-/* Buttons */
 .button-container {
     position: relative;
     width: 100%;
@@ -115,24 +99,23 @@ header {
     border: none;
     border-radius: 999px;
     cursor: pointer;
-    transition: all 0.3s ease;
 }
 
 #yesBtn {
     left: 40px;
     background: #ff4d6d;
     color: white;
-    box-shadow: 0 8px 20px rgba(255,77,109,0.4);
-}
-
-#yesBtn:hover {
-    transform: scale(1.05);
 }
 
 #noBtn {
     right: 40px;
     background: #e0e0e0;
-    color: #333;
+}
+
+.response-video {
+    width: 250px;
+    margin-top: 20px;
+    border-radius: 15px;
 }
 
 canvas {
@@ -141,22 +124,12 @@ canvas {
     left: 0;
     pointer-events: none;
 }
-
-.response-video {
-    width: 250px;
-    margin-top: 20px;
-    border-radius: 15px;
-}
 </style>
 </head>
 
 <body>
 
 <header>❤️ Happy Valentine's Day</header>
-
-<div class="hero">
-    <!-- Removed GIF -->
-</div>
 
 <div class="typewriter" id="typewriter"></div>
 
@@ -177,7 +150,7 @@ canvas {
 <div class="popup" id="popup">
     <h2>Will you be my Valentine?</h2>
 
-    <div class="button-container" id="buttonContainer">
+    <div class="button-container">
         <button id="yesBtn">YES</button>
         <button id="noBtn">NO</button>
     </div>
@@ -187,14 +160,22 @@ canvas {
 
 <canvas id="confetti"></canvas>
 
-<!-- Updated Background Music -->
-<audio id="bgMusic" loop>
-    <source src="song.mp3" type="audio/mpeg">
-</audio>
-
 <script>
 
-/* TYPEWRITER */
+/* ======== EXTERNAL LINKS (REPLACE THESE) ======== */
+const YES_VIDEO = "https://yourdomain.com/hcat.mp4";
+const NO_VIDEO = "https://yourdomain.com/scat.mp4";
+const SONG_URL = "https://yourdomain.com/song.mp3";
+
+/* ======== BACKGROUND MUSIC ======== */
+const music = new Audio(SONG_URL);
+music.loop = true;
+
+document.body.addEventListener("click", () => {
+    music.play().catch(() => {});
+}, { once: true });
+
+/* ======== TYPEWRITER ======== */
 const message = "Every moment with you feels like magic ✨";
 const typeDiv = document.getElementById("typewriter");
 let i = 0;
@@ -207,7 +188,7 @@ function typeWriter(){
 }
 typeWriter();
 
-/* FLOATING HEARTS */
+/* ======== FLOATING HEARTS ======== */
 function createHeart(){
     const heart = document.createElement("div");
     heart.className = "heart";
@@ -219,7 +200,7 @@ function createHeart(){
 }
 setInterval(createHeart, 400);
 
-/* FADE IMAGES */
+/* ======== FADE IMAGES ======== */
 const fadeImages = document.querySelectorAll('.fade-img');
 window.addEventListener("load", ()=>{
     fadeImages.forEach((img,index)=>{
@@ -227,7 +208,7 @@ window.addEventListener("load", ()=>{
     });
 });
 
-/* SHOW POPUP */
+/* ======== SHOW POPUP ======== */
 const popup = document.getElementById("popup");
 window.addEventListener("scroll", ()=>{
     if(window.scrollY > 400){
@@ -235,35 +216,26 @@ window.addEventListener("scroll", ()=>{
     }
 });
 
-/* MUSIC CONTROL */
-const music = document.getElementById("bgMusic");
-document.body.addEventListener("click", ()=>{
-    music.play().catch(()=>{});
-},{ once:true });
-
-/* BUTTON ACTIONS */
-const yesBtn = document.getElementById("yesBtn");
-const noBtn = document.getElementById("noBtn");
-const responseContainer = document.getElementById("responseContainer");
-
-function showVideo(src){
-    responseContainer.innerHTML = `
-        <video class="response-video" autoplay loop>
-            <source src="${src}" type="video/mp4">
+/* ======== SHOW VIDEO FUNCTION ======== */
+function showVideo(videoURL){
+    document.getElementById("responseContainer").innerHTML = `
+        <video class="response-video" autoplay loop controls>
+            <source src="${videoURL}" type="video/mp4">
         </video>
     `;
 }
 
-yesBtn.addEventListener("click", ()=>{
-    showVideo("hcat.mp4");
+/* ======== BUTTON ACTIONS ======== */
+document.getElementById("yesBtn").addEventListener("click", ()=>{
+    showVideo(YES_VIDEO);
     startConfetti();
 });
 
-noBtn.addEventListener("click", ()=>{
-    showVideo("scat.mp4");
+document.getElementById("noBtn").addEventListener("click", ()=>{
+    showVideo(NO_VIDEO);
 });
 
-/* CONFETTI (FIXED) */
+/* ======== CONFETTI ======== */
 const canvas=document.getElementById("confetti");
 const ctx=canvas.getContext("2d");
 
