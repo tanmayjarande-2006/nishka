@@ -22,7 +22,6 @@ header {
     font-weight: 600;
 }
 
-/* Hero */
 .hero {
     margin-top: 40px;
 }
@@ -33,7 +32,6 @@ header {
     border-radius: 20px;
 }
 
-/* Typewriter */
 .typewriter {
     font-size: 22px;
     margin-top: 20px;
@@ -41,7 +39,6 @@ header {
     font-weight: 500;
 }
 
-/* Gallery */
 .gallery {
     margin: 80px 0 120px 0;
     display: flex;
@@ -64,7 +61,6 @@ header {
     transform: translateY(0);
 }
 
-/* Popup */
 .popup {
     position: fixed;
     bottom: -500px;
@@ -83,7 +79,6 @@ header {
     bottom: 40px;
 }
 
-/* Buttons */
 .button-container {
     position: relative;
     width: 100%;
@@ -99,7 +94,6 @@ header {
     border: none;
     border-radius: 999px;
     cursor: pointer;
-    transition: all 0.3s ease;
 }
 
 #yesBtn {
@@ -114,7 +108,6 @@ header {
     color: #333;
 }
 
-/* Response Video */
 #responseVideo {
     display: none;
     width: 250px;
@@ -146,12 +139,18 @@ canvas {
     <img src="photo3.jpeg" class="fade-img">
     <img src="photo5.jpeg" class="fade-img">
     <img src="photo6.jpeg" class="fade-img">
+    <img src="photo7.jpeg" class="fade-img">
+    <img src="photo8.jpeg" class="fade-img">
+    <img src="photo9.jpeg" class="fade-img">
+    <img src="photo10.jpeg" class="fade-img">
+    <img src="photo11.jpeg" class="fade-img">
+    <img src="photo12.jpeg" class="fade-img">
 </div>
 
 <div class="popup" id="popup">
     <h2>Will you be my Valentine?</h2>
 
-    <div class="button-container" id="buttonContainer">
+    <div class="button-container">
         <button id="yesBtn">YES</button>
         <button id="noBtn">NO</button>
     </div>
@@ -182,38 +181,21 @@ typeWriter();
 
 /* FADE IMAGES */
 const fadeImages = document.querySelectorAll('.fade-img');
-window.addEventListener("load", ()=>{
-    fadeImages.forEach((img,index)=>{
-        setTimeout(()=>{ img.classList.add("show"); }, index*200);
+window.addEventListener("scroll", ()=>{
+    fadeImages.forEach(img=>{
+        if(img.getBoundingClientRect().top < window.innerHeight - 100){
+            img.classList.add("show");
+        }
     });
 });
 
 /* SHOW POPUP */
 const popup = document.getElementById("popup");
 window.addEventListener("scroll", ()=>{
-    if(window.scrollY > 200){
+    if(window.scrollY > 400){
         popup.classList.add("show");
     }
 });
-
-/* NO BUTTON ESCAPE */
-const noBtn = document.getElementById("noBtn");
-const container = document.getElementById("buttonContainer");
-
-function moveNoButton(){
-    const maxX = container.offsetWidth - noBtn.offsetWidth;
-    const randomX = Math.random()*maxX;
-    noBtn.style.left = randomX + "px";
-    noBtn.style.right = "auto";
-}
-
-container.addEventListener("mousemove",(e)=>{
-    const rect = noBtn.getBoundingClientRect();
-    const distance = Math.hypot(e.clientX-rect.left,e.clientY-rect.top);
-    if(distance < 90){ moveNoButton(); }
-});
-
-noBtn.addEventListener("touchstart", moveNoButton);
 
 /* MUSIC */
 const music = document.getElementById("bgMusic");
@@ -221,15 +203,15 @@ document.body.addEventListener("click", ()=>{
     music.play().catch(()=>{});
 },{ once:true });
 
-/* RESPONSE VIDEOS */
+/* RESPONSE VIDEO */
 const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
 const responseVideo = document.getElementById("responseVideo");
 
 yesBtn.addEventListener("click", ()=>{
     responseVideo.style.display = "block";
     responseVideo.src = "hcat.mp4";
     responseVideo.play();
-    music.play().catch(()=>{});
     startConfetti();
 });
 
