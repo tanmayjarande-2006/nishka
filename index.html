@@ -5,14 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Someone Special ❤️</title>
 
-<!-- Premium Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
 
-html {
-    scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
     margin: 0;
@@ -30,7 +27,6 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* Header */
 header {
     font-family: 'Playfair Display', serif;
     padding: 40px 20px;
@@ -38,15 +34,13 @@ header {
     color: #b3003b;
 }
 
-/* Hero */
-.hero img {
+.hero video {
     width: 320px;
     max-width: 90%;
     border-radius: 25px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
 }
 
-/* Typewriter */
 .typewriter {
     font-size: 22px;
     margin-top: 20px;
@@ -55,7 +49,6 @@ header {
     color: #4d0026;
 }
 
-/* Gallery */
 .gallery {
     margin: 80px 0 120px 0;
     display: flex;
@@ -74,16 +67,11 @@ header {
     box-shadow: 0 20px 40px rgba(0,0,0,0.15);
 }
 
-.fade-img:hover {
-    transform: scale(1.05);
-}
-
 .fade-img.show {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* Glass Popup */
 .popup {
     position: fixed;
     bottom: 50%;
@@ -119,18 +107,12 @@ header {
     border: none;
     border-radius: 999px;
     cursor: pointer;
-    transition: all 0.3s ease;
 }
 
 #yesBtn {
     left: 40px;
     background: linear-gradient(135deg, #ff4d6d, #ff758c);
     color: white;
-    box-shadow: 0 15px 30px rgba(255,77,109,0.4);
-}
-
-#yesBtn:hover {
-    transform: scale(1.1);
 }
 
 #noBtn {
@@ -138,15 +120,12 @@ header {
     background: #f2f2f2;
 }
 
-#responseGif {
-    display:none;
-    width:220px;
-    margin-top:20px;
-    border-radius:20px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+.responseVideo {
+    width: 220px;
+    margin-top: 20px;
+    border-radius: 20px;
 }
 
-/* Floating Hearts */
 .heart {
     position: fixed;
     bottom: -20px;
@@ -177,8 +156,9 @@ canvas {
 <header>For Someone Special ❤️</header>
 
 <div class="hero">
-    <!-- Make sure this file name matches EXACTLY -->
-    <img src="hero.gif">
+    <video autoplay loop muted>
+        <source src="hcat.mp4" type="video/mp4">
+    </video>
 </div>
 
 <div class="typewriter" id="typewriter"></div>
@@ -187,6 +167,14 @@ canvas {
     <img src="photo1.jpeg" class="fade-img">
     <img src="photo2.jpeg" class="fade-img">
     <img src="photo3.jpeg" class="fade-img">
+    <img src="photo5.jpeg" class="fade-img">
+    <img src="photo6.jpeg" class="fade-img">
+    <img src="photo7.jpeg" class="fade-img">
+    <img src="photo8.jpeg" class="fade-img">
+    <img src="photo9.jpeg" class="fade-img">
+    <img src="photo10.jpeg" class="fade-img">
+    <img src="photo11.jpeg" class="fade-img">
+    <img src="photo12.jpeg" class="fade-img">
 </div>
 
 <div class="popup" id="popup">
@@ -197,14 +185,13 @@ canvas {
         <button id="noBtn">NO</button>
     </div>
 
-    <img id="responseGif">
+    <div id="responseContainer"></div>
 </div>
 
 <canvas id="confetti"></canvas>
 
-<!-- Your MP3 File -->
 <audio id="bgMusic" loop>
-    <source src="romantic-song.mp3" type="audio/mpeg">
+    <source src="song.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -222,7 +209,7 @@ function typeWriter(){
 }
 typeWriter();
 
-/* FLOATING HEARTS */
+/* HEARTS */
 function createHeart(){
     const heart = document.createElement("div");
     heart.className = "heart";
@@ -234,15 +221,15 @@ function createHeart(){
 }
 setInterval(createHeart, 400);
 
-/* FADE IMAGES */
+/* FADE IN */
 const fadeImages = document.querySelectorAll('.fade-img');
 window.addEventListener("load", ()=>{
     fadeImages.forEach((img,index)=>{
-        setTimeout(()=>{ img.classList.add("show"); }, index*300);
+        setTimeout(()=>{ img.classList.add("show"); }, index*200);
     });
 });
 
-/* SHOW POPUP */
+/* POPUP */
 const popup = document.getElementById("popup");
 window.addEventListener("scroll", ()=>{
     if(window.scrollY > 300){
@@ -250,7 +237,7 @@ window.addEventListener("scroll", ()=>{
     }
 });
 
-/* NO BUTTON ESCAPE */
+/* NO BUTTON MOVE */
 const noBtn = document.getElementById("noBtn");
 const container = document.getElementById("buttonContainer");
 function moveNoButton(){
@@ -265,7 +252,7 @@ container.addEventListener("mousemove",(e)=>{
     if(distance<90){ moveNoButton(); }
 });
 
-/* MUSIC START ON FIRST CLICK */
+/* MUSIC */
 const music = document.getElementById("bgMusic");
 document.body.addEventListener("click", ()=>{
     music.play().catch(()=>{});
@@ -273,11 +260,14 @@ document.body.addEventListener("click", ()=>{
 
 /* YES BUTTON */
 const yesBtn = document.getElementById("yesBtn");
-const responseGif = document.getElementById("responseGif");
+const responseContainer = document.getElementById("responseContainer");
 
 yesBtn.addEventListener("click", ()=>{
-    responseGif.style.display="block";
-    responseGif.src="romantic-response.gif";  // make sure file name matches
+    responseContainer.innerHTML = `
+        <video autoplay loop muted class="responseVideo">
+            <source src="scat.mp4" type="video/mp4">
+        </video>
+    `;
     music.play().catch(()=>{});
     startConfetti();
 });
