@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For Someone Special ❤️</title>
+<title>Will You Be My Valentine? 💘</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 
@@ -107,6 +107,7 @@ header {
     border: none;
     border-radius: 999px;
     cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 #yesBtn {
@@ -120,10 +121,35 @@ header {
     background: #f2f2f2;
 }
 
+#yesBtn.dominant {
+    position: fixed;
+    left: 50% !important;
+    top: 60% !important;
+    transform: translate(-50%, -50%) scale(3);
+    box-shadow: 0 0 30px #ff4d6d, 0 0 60px #ff4d6d;
+    z-index: 1000;
+}
+
 .responseVideo {
     width: 220px;
     margin-top: 20px;
     border-radius: 20px;
+}
+
+#dramaText {
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 26px;
+    font-weight: bold;
+    color: #b3003b;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+#dramaText.show {
+    opacity: 1;
 }
 
 .heart {
@@ -135,10 +161,7 @@ header {
 }
 
 @keyframes floatUp {
-    to {
-        transform: translateY(-110vh);
-        opacity: 0;
-    }
+    to { transform: translateY(-110vh); opacity: 0; }
 }
 
 canvas {
@@ -153,7 +176,7 @@ canvas {
 
 <body>
 
-<header>For Someone Special ❤️</header>
+<header>Will You Be My Valentine? 💘</header>
 
 <div class="hero">
     <video autoplay loop muted>
@@ -178,7 +201,7 @@ canvas {
 </div>
 
 <div class="popup" id="popup">
-    <h2>Will you be mine forever? 💖</h2>
+    <h2>Will you be my Valentine? 💖</h2>
 
     <div class="button-container" id="buttonContainer">
         <button id="yesBtn">YES</button>
@@ -187,6 +210,8 @@ canvas {
 
     <div id="responseContainer"></div>
 </div>
+
+<div id="dramaText">There is only one choice… 😌💖</div>
 
 <canvas id="confetti"></canvas>
 
@@ -197,12 +222,11 @@ canvas {
 <script>
 
 /* TYPEWRITER */
-const message = "Every moment with you feels like magic ✨";
-const typeDiv = document.getElementById("typewriter");
+const message = "From the first moment, you made everything feel magical ✨";
 let i = 0;
 function typeWriter(){
     if(i < message.length){
-        typeDiv.innerHTML += message.charAt(i);
+        document.getElementById("typewriter").innerHTML += message.charAt(i);
         i++;
         setTimeout(typeWriter, 60);
     }
@@ -221,68 +245,93 @@ function createHeart(){
 }
 setInterval(createHeart, 400);
 
-/* FADE IN */
-const fadeImages = document.querySelectorAll('.fade-img');
+/* FADE IMAGES */
 window.addEventListener("load", ()=>{
-    fadeImages.forEach((img,index)=>{
-        setTimeout(()=>{ img.classList.add("show"); }, index*200);
+    document.querySelectorAll('.fade-img').forEach((img,index)=>{
+        setTimeout(()=> img.classList.add("show"), index*200);
     });
 });
 
 /* POPUP */
-const popup = document.getElementById("popup");
 window.addEventListener("scroll", ()=>{
     if(window.scrollY > 300){
-        popup.classList.add("show");
+        document.getElementById("popup").classList.add("show");
     }
 });
 
-/* NO BUTTON MOVE */
+/* BUTTON LOGIC */
 const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
 const container = document.getElementById("buttonContainer");
+const responseContainer = document.getElementById("responseContainer");
+
+let noScale = 1;
+let yesScale = 1;
+let dominanceTriggered = false;
+
 function moveNoButton(){
     const maxX = container.offsetWidth - noBtn.offsetWidth;
-    const randomX = Math.random()*maxX;
-    noBtn.style.left = randomX+"px";
+    noBtn.style.left = Math.random()*maxX+"px";
     noBtn.style.right="auto";
 }
+
 container.addEventListener("mousemove",(e)=>{
     const rect = noBtn.getBoundingClientRect();
     const distance = Math.hypot(e.clientX-rect.left,e.clientY-rect.top);
-    if(distance<90){ moveNoButton(); }
+
+    if(distance < 90){
+
+        responseContainer.innerHTML = `
+            <video autoplay loop muted class="responseVideo">
+                <source src="scat.mp4" type="video/mp4">
+            </video>
+        `;
+
+        if(noScale > 0.2){
+            noScale -= 0.1;
+            noBtn.style.transform = `scale(${noScale})`;
+        }
+
+        if(yesScale < 2.5){
+            yesScale += 0.2;
+            yesBtn.style.transform = `scale(${yesScale})`;
+        }
+
+        if(yesScale >= 2.2 && !dominanceTriggered){
+            dominanceTriggered = true;
+            yesBtn.classList.add("dominant");
+            document.getElementById("dramaText").classList.add("show");
+        }
+
+        moveNoButton();
+    }
 });
 
-/* MUSIC */
-const music = document.getElementById("bgMusic");
-document.body.addEventListener("click", ()=>{
-    music.play().catch(()=>{});
-},{ once:true });
-
-/* YES BUTTON */
-const yesBtn = document.getElementById("yesBtn");
-const responseContainer = document.getElementById("responseContainer");
-
+/* YES CLICK */
 yesBtn.addEventListener("click", ()=>{
     responseContainer.innerHTML = `
         <video autoplay loop muted class="responseVideo">
-            <source src="scat.mp4" type="video/mp4">
+            <source src="hcat.mp4" type="video/mp4">
         </video>
     `;
-    music.play().catch(()=>{});
+    document.getElementById("bgMusic").play().catch(()=>{});
     startConfetti();
 });
+
+/* MUSIC SAFE PLAY */
+document.body.addEventListener("click", ()=>{
+    document.getElementById("bgMusic").play().catch(()=>{});
+},{ once:true });
 
 /* CONFETTI */
 const canvas=document.getElementById("confetti");
 const ctx=canvas.getContext("2d");
-
-function resizeCanvas(){
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+window.addEventListener("resize",()=>{
     canvas.width=window.innerWidth;
     canvas.height=window.innerHeight;
-}
-resizeCanvas();
-window.addEventListener("resize",resizeCanvas);
-
+});
 let pieces=[];
 function startConfetti(){
     for(let i=0;i<150;i++){
@@ -296,7 +345,6 @@ function startConfetti(){
     }
     requestAnimationFrame(updateConfetti);
 }
-
 function updateConfetti(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     pieces.forEach(p=>{
